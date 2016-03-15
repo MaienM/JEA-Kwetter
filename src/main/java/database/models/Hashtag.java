@@ -1,14 +1,19 @@
-package models;
+package database.models;
 
+import services.KwetterService;
+
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
 public class Hashtag {
-    static final Pattern REGEX_NAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]+[A-Za-z0-9]");
+    public static final Pattern REGEX_NAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]+[A-Za-z0-9]");
+
+    @Inject
+    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +25,7 @@ public class Hashtag {
     @ManyToMany
     private List<Tweet> tweets = new ArrayList<>();
 
+    public Hashtag() {}
     public Hashtag(String name) {
         this.name = name;
     }
@@ -33,6 +39,10 @@ public class Hashtag {
     }
 
     public List<Tweet> getTweets() {
-        return Collections.unmodifiableList(tweets);
+        return tweets;
+    }
+
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
     }
 }

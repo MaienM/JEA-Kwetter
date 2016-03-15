@@ -2,6 +2,8 @@ package models;
 
 import static org.junit.Assert.*;
 
+import database.models.Tweet;
+import database.models.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,13 +20,5 @@ public class UserTests {
         Tweet t = user.addTweet("test");
         assertNotNull(t);
         assertTrue(user.getTweets().contains(t));
-    }
-
-    @Test
-    public void addFollowing() {
-        User u2 = new User("test2");
-        user.addFollowing(u2);
-        assertTrue(user.getFollowing().contains(u2));
-        assertTrue(u2.getFollowers().contains(user));
     }
 }

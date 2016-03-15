@@ -1,14 +1,19 @@
-package models;
+package database.models;
 
+import services.KwetterService;
+
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
 public class User {
-    static final Pattern REGEX_USERNAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
+    public static final Pattern REGEX_USERNAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
+
+    @Inject
+    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +34,7 @@ public class User {
     @ManyToMany(mappedBy = "followee")
     private List<User> followers = new ArrayList<>();
 
+    public User() {}
     public User(String username) {
         this.username = username;
     }
@@ -46,33 +52,45 @@ public class User {
     }
 
     public List<Tweet> getTweets() {
-        return Collections.unmodifiableList(tweets);
+        return tweets;
     }
 
-    private Tweet addTweet(Tweet tweet) {
-        tweets.add(tweet);
-        return tweet;
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+    private void addTweet(Tweet tweet) {
+        this.tweets.add(tweet);
     }
 
     public Tweet addTweet(String content) {
-        return addTweet(new Tweet(this, content));
+        Tweet tweet = new Tweet(this, content);
+        addTweet(tweet);
+        return tweet;
     }
 
     public List<Tweet> getMentions() {
-        return Collections.unmodifiableList(mentions);
+        return mentions;
+    }
+
+    public void setMentions(List<Tweet> mentions) {
+        this.mentions = mentions;
     }
 
     public List<User> getFollowing() {
-        return Collections.unmodifiableList(following);
+        return following;
     }
 
-    public User addFollowing(User user) {
-        following.add(user);
-        user.followers.add(this);
-        return user;
+    public void setFollowing(List<User> following) {
+        this.following = following;
     }
 
     public List<User> getFollowers() {
-        return Collections.unmodifiableList(followers);
+        return followers;
+    }
+
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
     }
 }
+

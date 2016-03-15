@@ -1,17 +1,18 @@
-package models;
+package database.models;
 
-import com.avaje.ebean.Ebean;
+import services.KwetterService;
 
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Entity
 public class Tweet {
     public final int MAX_LENGTH = 140;
+
+    @Inject
+    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +30,7 @@ public class Tweet {
     @ManyToMany
     private List<Hashtag> hashtags = new ArrayList<>();
 
+    public Tweet() {}
     public Tweet(User user, String content) {
         this.user = user;
         this.setContent(content);
@@ -42,31 +44,11 @@ public class Tweet {
         return content;
     }
 
-    static final Pattern REGEX_MENTION = Pattern.compile("@(?<username>" + User.REGEX_USERNAME + ")");
-    static final Pattern REGEX_HASHTAG = Pattern.compile("#(?<hashtag>" + Hashtag.REGEX_NAME + ")");
-
     public void setContent(String content) {
-        this.content = content;
-
         if (content.length() > MAX_LENGTH) {
             throw new IllegalArgumentException(String.format("Tweet content exceeds %d characters", MAX_LENGTH));
         }
-
-        // Find mentions.
-        mentioned.clear();
-        Matcher mentionMatcher = REGEX_MENTION.matcher(content);
-        while (mentionMatcher.find()) {
-            // TODO: Don't create new users!.
-            this.mentioned.add(new User(mentionMatcher.group("username")));
-        }
-
-        // Find mentions.
-        hashtags.clear();
-        Matcher hashtagMatcher = REGEX_HASHTAG.matcher(content);
-        while (hashtagMatcher.find()) {
-            // TODO: Only create new tags if needed.
-            this.hashtags.add(new Hashtag(hashtagMatcher.group("hashtag")));
-        }
+        this.content = content;
     }
 
     public User getUser() {
@@ -78,10 +60,18 @@ public class Tweet {
     }
 
     public List<User> getMentioned() {
-        return Collections.unmodifiableList(mentioned);
+        return mentioned;
+    }
+
+    public void setMentioned(List<User> mentioned) {
+        this.mentioned = mentioned;
     }
 
     public List<Hashtag> getHashtags() {
-        return Collections.unmodifiableList(hashtags);
+        return hashtags;
+    }
+
+    public void setHashtags(List<Hashtag> hashtags) {
+        this.hashtags = hashtags;
     }
 }
