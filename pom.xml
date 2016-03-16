@@ -102,5 +102,10 @@
             <artifactId>h2</artifactId>
             <version>1.4.191</version>
         </dependency>
+        <dependency>
+            <groupId>javax.batch</groupId>
+            <artifactId>javax.batch-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 </project>

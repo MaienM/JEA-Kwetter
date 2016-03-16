@@ -1,5 +1,6 @@
 package services;
 
+import com.google.gson.Gson;
 import database.daos.HashtagDAO;
 import database.daos.TweetDAO;
 import database.daos.UserDAO;
@@ -10,8 +11,12 @@ import database.models.User;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,8 +27,8 @@ public class KwetterService {
     @Inject private TweetDAO tweetDAO;
     @Inject private UserDAO userDAO;
 
-    static final Pattern REGEX_MENTION = Pattern.compile("@(?<username>" + User.REGEX_USERNAME + ")");
-    static final Pattern REGEX_HASHTAG = Pattern.compile("#(?<hashtag>" + Hashtag.REGEX_NAME + ")");
+    public static final Pattern REGEX_MENTION = Pattern.compile("@(?<username>" + User.REGEX_USERNAME + ")");
+    public static final Pattern REGEX_HASHTAG = Pattern.compile("#(?<hashtag>" + Hashtag.REGEX_NAME + ")");
 
     public User createUser(String username) {
         User user = new User(username);
