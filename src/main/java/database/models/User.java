@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
+@Table(name = "users")
 public class User {
     public static final Pattern REGEX_USERNAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
-
-    @Inject
-    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,16 +20,21 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Tweet> tweets = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "mentioned")
     private List<Tweet> mentions = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "follower")
+    @ManyToMany
+    @JoinTable(
+            name = "follows",
+            joinColumns = @JoinColumn(name = "follower_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "followee_id", referencedColumnName = "id")
+    )
     private List<User> following = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "followee")
+    @ManyToMany(mappedBy = "following")
     private List<User> followers = new ArrayList<>();
 
     public User() {}

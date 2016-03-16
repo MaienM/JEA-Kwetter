@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "tweets")
 public class Tweet {
+    @Transient
     public final int MAX_LENGTH = 140;
-
-    @Inject
-    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,12 +21,23 @@ public class Tweet {
     private String content;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany
+    @JoinTable(
+            name = "mentions",
+            joinColumns = @JoinColumn(name = "tweet_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     private List<User> mentioned = new ArrayList<>();
 
     @ManyToMany
+    @JoinTable(
+            name = "tweet_tags",
+            joinColumns = @JoinColumn(name = "tweet_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id", referencedColumnName = "id")
+    )
     private List<Hashtag> hashtags = new ArrayList<>();
 
     public Tweet() {}

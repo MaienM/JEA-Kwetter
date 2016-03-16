@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="main">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="dialect" value="org.hibernate.dialect.H2Dialect" />
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />
+            <property name="javax.persistence.jdbc.user" value="sa" />
+            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="format_sql" value="true" />
+            <property name="hibernate.connection.charSet" value="UTF-8" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+        </properties>
+
+        <!--<class>database.models.Hashtag</class>
+        <class>database.models.Tweet</class>
+        <class>database.models.User</class>-->
+    </persistence-unit>
+</persistence>

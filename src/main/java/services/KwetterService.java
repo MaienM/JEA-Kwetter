@@ -7,6 +7,7 @@ import database.models.Hashtag;
 import database.models.Tweet;
 import database.models.User;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named
+@Stateless
 public class KwetterService {
     @Inject private HashtagDAO hashtagDAO;
     @Inject private TweetDAO tweetDAO;
@@ -27,6 +29,26 @@ public class KwetterService {
         User user = new User(username);
         userDAO.save(user);
         return user;
+    }
+
+    public List<Tweet> getRecentTweets() {
+        return tweetDAO.getRecent();
+    }
+
+    public List<Tweet> getRecentTweetsHashtag(String tag) {
+        return tweetDAO.getRecentByHashtag(hashtagDAO.find(tag));
+    }
+
+    public List<Tweet> getRecentTweetsFollows(User user) {
+        return tweetDAO.getRecentOfFollows(user);
+    }
+
+    public List<Tweet> getRecentTweetsMentioning(User user) {
+        return tweetDAO.getRecentByMentioning(user);
+    }
+
+    public List<Tweet> findTweetsByText(String text) {
+        return tweetDAO.findByText(text);
     }
 
     public Tweet createTweet(User user, String content) {
@@ -50,6 +72,21 @@ public class KwetterService {
         }
         tweet.setHashtags(hashtags);
 
+        tweetDAO.save(tweet);
         return tweet;
+    }
+
+    public List<User> getFollows(User user) {
+        return user.getFollowing();
+    }
+
+    public void addFollow(User user, User followee) {
+        user.getFollowing().add(followee);
+        userDAO.save(user);
+    }
+
+    public void removeFollow(User user, User followee) {
+        user.getFollowing().remove(followee);
+        userDAO.save(user);
     }
 }

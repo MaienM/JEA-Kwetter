@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
+@Table(name = "hashtags")
 public class Hashtag {
     public static final Pattern REGEX_NAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]+[A-Za-z0-9]");
-
-    @Inject
-    private KwetterService service;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +20,7 @@ public class Hashtag {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "hashtags")
     private List<Tweet> tweets = new ArrayList<>();
 
     public Hashtag() {}
