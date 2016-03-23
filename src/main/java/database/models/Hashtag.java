@@ -1,9 +1,8 @@
 package database.models;
 
-import services.KwetterService;
-
-import javax.inject.Inject;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -20,12 +19,12 @@ public class Hashtag {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashtags", cascade = CascadeType.ALL)
     private List<Tweet> tweets = new ArrayList<>();
 
     public Hashtag() {}
     public Hashtag(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public long getId() {

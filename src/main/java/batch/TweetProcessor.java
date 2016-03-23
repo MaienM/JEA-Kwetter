@@ -8,11 +8,16 @@ import services.KwetterService;
 
 import javax.batch.api.chunk.ItemProcessor;
 import javax.batch.runtime.context.JobContext;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
+@Dependent
+@Named
 public class TweetProcessor implements ItemProcessor {
     public class TweetProcessorInfo {
         public final String user;
@@ -30,6 +35,9 @@ public class TweetProcessor implements ItemProcessor {
 
     @Override
     public Object processItem(Object o) throws Exception {
+        Logger logger = Logger.getLogger(getClass().getName());
+        logger.warning("Processing");
+
         TweetReader.TweetInputInfo input = (TweetReader.TweetInputInfo) o;
         TweetProcessor.TweetProcessorInfo info = new TweetProcessorInfo(input.user, input.tweet);
 

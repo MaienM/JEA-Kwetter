@@ -20,11 +20,11 @@ public class Tweet {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "mentions",
             joinColumns = @JoinColumn(name = "tweet_id", referencedColumnName = "id"),
@@ -32,7 +32,7 @@ public class Tweet {
     )
     private List<User> mentioned = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "tweet_tags",
             joinColumns = @JoinColumn(name = "tweet_id", referencedColumnName = "id"),

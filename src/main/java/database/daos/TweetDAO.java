@@ -4,22 +4,20 @@ import database.models.Hashtag;
 import database.models.Tweet;
 import database.models.User;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Michon on 3/15/2016.
- */
-public class TweetDAO {
-    @Inject private EntityManager em;
-
-    public void save(Tweet tweet) {
-        em.getTransaction().begin();
-        em.persist(tweet);
-        em.getTransaction().commit();
+@Named
+@Stateless
+public class TweetDAO extends BaseDAO<Tweet> {
+    public long getCount() {
+        return (long) em.createQuery("SELECT COUNT(tweet) FROM Tweet tweet").getSingleResult();
     }
 
     public List<Tweet> getRecent() {

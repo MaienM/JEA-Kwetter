@@ -1,0 +1,9 @@
+<job id="TweetImportJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
+    <step id="process">
+        <chunk item-count="50">
+            <reader ref="tweetReader" />
+            <processor ref="tweetProcessor" />
+            <writer ref="tweetWriter" />
+        </chunk>
+    </step>
+</job>

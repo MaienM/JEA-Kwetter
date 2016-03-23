@@ -20,13 +20,13 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tweet> tweets = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "mentioned")
+    @ManyToMany(mappedBy = "mentioned", cascade = CascadeType.ALL)
     private List<Tweet> mentions = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "follows",
             joinColumns = @JoinColumn(name = "follower_id", referencedColumnName = "id"),
@@ -34,7 +34,7 @@ public class User {
     )
     private List<User> following = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "following")
+    @ManyToMany(mappedBy = "following", cascade = CascadeType.ALL)
     private List<User> followers = new ArrayList<>();
 
     public User() {}

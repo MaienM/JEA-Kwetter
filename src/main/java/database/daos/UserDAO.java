@@ -2,24 +2,17 @@ package database.daos;
 
 import database.models.User;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 
-/**
- * Created by Michon on 3/15/2016.
- */
-public class UserDAO {
-    @Inject private EntityManager em;
-
-    public void save(User user) {
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
-;
-    }
-
+@Named
+@Stateless
+public class UserDAO extends BaseDAO<User> {
     public User findByUsername(String username) {
         try {
             return (User) em.createQuery("SELECT user FROM User user WHERE user.username = :username").setParameter("username", username).getSingleResult();

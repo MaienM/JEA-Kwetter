@@ -6,6 +6,8 @@ import org.jglue.cdiunit.CdiRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -28,7 +30,7 @@ public class KwetterServiceTests {
     @Produces
     private EntityManager createEntityManager() {
         if (em == null) {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("main");
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("test");
             em = emf.createEntityManager();
         }
         return em;
@@ -37,6 +39,12 @@ public class KwetterServiceTests {
     @Before
     public void setUp() {
         user = service.createUser("user");
+    }
+
+    @Test
+    public void getTweetCount() {
+        for (int i = 0; i < 345; i++) service.createTweet(user, "Lorem ipsum");
+        assertEquals(345, service.getTweetCount());
     }
 
     @Test
@@ -128,10 +136,13 @@ public class KwetterServiceTests {
 
     @Test
     public void createTweetMentionTwo() {
-        service.createUser("user1");
-        service.createUser("user2");
+        User u1 = service.createUser("user1");
+        User u2 = service.createUser("user2");
         Tweet t = service.createTweet(user, "@user1 @user2");
         assertEquals(2, t.getMentioned().size());
+
+        em.refresh(u1);
+        assertEquals(1, u1.getMentions().size());
     }
 
     @Test

@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-    <persistence-unit name="main">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <persistence-unit name="main" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>testt</jta-data-source>
+        <properties>
+            <property name="dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:myDB" />
+            <property name="javax.persistence.jdbc.user" value="" />
+            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="format_sql" value="true" />
+            <property name="hibernate.connection.charSet" value="UTF-8" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="test">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
             <property name="dialect" value="org.hibernate.dialect.H2Dialect" />
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
@@ -14,9 +32,5 @@
             <property name="hibernate.connection.charSet" value="UTF-8" />
             <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
-
-        <!--<class>database.models.Hashtag</class>
-        <class>database.models.Tweet</class>
-        <class>database.models.User</class>-->
     </persistence-unit>
 </persistence>
