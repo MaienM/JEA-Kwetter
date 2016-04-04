@@ -68,6 +68,12 @@ public class TweetWriter implements ItemWriter {
                 if (!tags.containsKey(tag)) tags.put(tag, hashtagDAO.findOrCreateByName(tag));
                 tweet.getHashtags().add(tags.get(tag));
             }
+
+            // FIXME:
+            // Automatically follow all users that you mention so that I have test data
+            for (User mentioned : tweet.getMentioned()) {
+                users.get(processorInfo.user).getFollowing().add(mentioned);
+            }
         }
     }
 

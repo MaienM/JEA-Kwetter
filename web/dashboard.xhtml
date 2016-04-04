@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://openfaces.org/"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:kwetter="http://java.sun.com/jsf/composite/kwetter" xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <h:body>
+        <ui:composition template="WEB-INF/templates/template.xhtml">
+            <ui:define name="body">
+                <ui:fragment rendered="#{main.currentUser == null}">
+                    <div class="row">
+                        <div class="col s12">
+                            <p>User not found.</p>
+                            <ui:fragment rendered="#{main.randomUser != null}">
+                                <p><a href="dashboard.xhtml?user=#{main.randomUser.username}">Click here to go to a random user's page</a></p>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{main.currentUser != null}">
+                    <div class="row">
+                        <div class="col s8">
+                            <div class="card">
+                                <div class="card-content">
+                                    <span class="card-title">Search</span>
+                                    <h:form>
+                                        <div class="row">
+                                            <div class="input-field col s10">
+                                                <h:inputText id="search" value="#{main.query}" />
+                                                <label for="search">Search</label>
+                                            </div>
+                                            <div class="input-field col s2">
+                                                <h:commandButton styleClass="btn-large waves-effect waves-white" value="Find">
+                                                    <f:ajax execute="search" render=":timeline" />
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <div class="card">
+                                <div class="card-content">
+                                    <span class="card-title">Log out</span>
+                                    <p><a href="user-tweets.xhtml?user=#{param['user']}">Log out #{main.currentUser.username}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s8">
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <span class="card-title">Post</span>
+                                            <h:form>
+                                                <div class="row">
+                                                    <div class="input-field col s10">
+                                                        <h:inputText id="tweet" value="#{main.post}" maxlength="140" />
+                                                        <label for="tweet">What's happening?</label>
+                                                    </div>
+                                                    <div class="input-field col s2">
+                                                        <h:commandButton styleClass="btn-large waves-effect waves-white" value="Post">
+                                                            <f:ajax execute="tweet" render="tweet :timeline :userTweets" />
+                                                        </h:commandButton>
+                                                    </div>
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <ul class="tabs">
+                                        <li class="tab col s6"><a href="#tab-timeline">Timeline</a></li>
+                                        <li class="tab col s6"><a href="#tab-mentions">@Mentions</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col s12">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div id="tab-timeline">
+                                                <span class="card-title">Timeline</span>
+
+                                                <h:panelGroup id="timeline" layout="block">
+                                                    <kwetter:tweet-list tweets="#{main.tweets}" text_none="No tweets" />
+                                                </h:panelGroup>
+                                            </div>
+                                            <div id="tab-mentions">
+                                                <span class="card-title">Mentions</span>
+
+                                                <h:panelGroup id="mentions" layout="block">
+                                                    <kwetter:tweet-list tweets="#{main.currentUserMentionedTweets}" text_none="You've not been mentioned in any tweets" />
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h:panelGroup styleClass="card" id="userTweets" layout="block">
+                                        <div class="card-content">
+                                            <span class="card-title">Your tweets</span>
+                                            <ui:fragment rendered="#{empty main.currentUserTweets}">
+                                                <p>You haven't posted anything yet!</p>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{not empty main.currentUserTweets}">
+                                                <p>#{main.currentUserTweets[0].content}</p>
+                                            </ui:fragment>
+                                        </div>
+                                        <div class="card-action">
+                                            <a href="user-tweets.xhtml?user=#{param['user']}">View all (#{main.currentUserTweetCount})</a>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s6">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <span class="card-title">Following #{main.currentUser.following.size()}</span>
+
+                                            <kwetter:user-list users="#{main.currentUser.following}" user_url="user-tweets.xhtml" text_none="Not following anyone" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s6">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <span class="card-title">Followers #{main.currentUser.followers.size()}</span>
+
+                                            <kwetter:user-list users="#{main.currentUser.followers}" user_url="user-tweets.xhtml" text_none="Not followed by anyone" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <span class="card-title">Trends</span>
+
+                                            <h:form>
+                                                <f:ajax render=":timeline">
+                                                    <ul class="collection">
+                                                        <c:forEach items="#{main.trends}" var="tag">
+                                                            <li class="collection-item">
+                                                                <h:commandLink value="#{tag.name}" action="#{main.setHashtag(tag.name)}" />
+                                                            </li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </f:ajax>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ui:fragment>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

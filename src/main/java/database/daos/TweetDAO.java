@@ -29,6 +29,16 @@ public class TweetDAO extends BaseDAO<Tweet> {
         return em.createQuery("SELECT tweet FROM Tweet tweet Join tweet.hashtags tag WHERE tag = :tag ORDER BY tweet.id DESC").setMaxResults(50).setParameter("tag", tag).getResultList();
     }
 
+    public List<Tweet> getRecentByUser(User user) {
+        if (user == null) return Collections.emptyList();
+        return em.createQuery("SELECT tweet FROM Tweet tweet WHERE tweet.user = :user ORDER BY tweet.id DESC").setMaxResults(50).setParameter("user", user).getResultList();
+    }
+
+    public long getCountByUser(User user) {
+        if (user == null) return 0;
+        return (long) em.createQuery("SELECT COUNT(tweet) FROM Tweet tweet WHERE tweet.user = :user").setParameter("user", user).getSingleResult();
+    }
+
     public List<Tweet> getRecentOfFollows(User user) {
         if (user == null) return Collections.emptyList();
         return em.createQuery("SELECT tweet FROM Tweet tweet Join tweet.user.followers follower WHERE follower = :user ORDER BY tweet.id DESC").setMaxResults(50).setParameter("user", user).getResultList();
@@ -40,6 +50,10 @@ public class TweetDAO extends BaseDAO<Tweet> {
     }
 
     public List<Tweet> findByText(String text) {
-        return em.createQuery("SELECT tweet FROM Tweet tweet WHERE tweet.content LIKE :text ORDER BY tweet.id DESC").setMaxResults(50).setParameter("text", "%" + text + "%").getResultList();
+        return em.createQuery("SELECT tweet FROM Tweet tweet WHERE lower(tweet.content) LIKE :text ORDER BY tweet.id DESC").setMaxResults(50).setParameter("text", "%" + text.toLowerCase() + "%").getResultList();
+    }
+
+    public Tweet findByID(long id) {
+        return em.find(Tweet.class, id);
     }
 }

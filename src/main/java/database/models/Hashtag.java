@@ -1,10 +1,14 @@
 package database.models;
 
+import flexjson.JSON;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Entity
@@ -19,8 +23,9 @@ public class Hashtag {
     @Column(nullable = false)
     private String name;
 
+    @JSON(include = false)
     @ManyToMany(mappedBy = "hashtags", cascade = CascadeType.ALL)
-    private List<Tweet> tweets = new ArrayList<>();
+    private Set<Tweet> tweets = new HashSet<>();
 
     public Hashtag() {}
     public Hashtag(String name) {
@@ -35,11 +40,11 @@ public class Hashtag {
         return name;
     }
 
-    public List<Tweet> getTweets() {
+    public Set<Tweet> getTweets() {
         return tweets;
     }
 
-    public void setTweets(List<Tweet> tweets) {
+    public void setTweets(Set<Tweet> tweets) {
         this.tweets = tweets;
     }
 }

@@ -1,6 +1,6 @@
 package batch;
 
-import com.google.gson.Gson;
+import flexjson.JSONDeserializer;
 
 import javax.batch.api.chunk.ItemReader;
 import javax.batch.operations.JobOperator;
@@ -42,8 +42,8 @@ public class TweetReader implements ItemReader {
         String resourceName = (String) jobParameters.get("tweetInputDataFileName");
 
         // Read the file.
-        Gson gson = new Gson();
-        Map<String, Object> data = gson.<HashMap<String, Object>>fromJson(new FileReader(resourceName), HashMap.class);
+        JSONDeserializer<Map<String, Object>> deserializer = new JSONDeserializer<>();
+        Map<String, Object> data = deserializer.deserialize(new FileReader(resourceName));
         tweets = (List<Map<String, Object>>) data.getOrDefault("Tweets", new ArrayList<HashMap<String, Object>>());
 
         // Restore position.

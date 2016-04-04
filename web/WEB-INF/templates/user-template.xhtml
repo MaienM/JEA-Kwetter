@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+    <h:body>
+        <ui:composition template="template.xhtml">
+            <ui:define name="body">
+                <div class="row">
+                    <ui:fragment rendered="#{main.currentUser == null}">
+                        <div class="col s12">
+                            <p>User not found.</p>
+                            <ui:fragment rendered="#{main.randomUser != null}">
+                                <p><a href="user-tweets.xhtml?user=#{main.randomUser.username}">Click here to go to a random user's page</a></p>
+                            </ui:fragment>
+                        </div>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{main.currentUser != null}">
+                        <div class="col s8">
+                            <div class="card">
+                                <div class="card-content">
+                                    <ui:insert name="S0">
+                                        <span class="card-title">S0: User</span>
+                                        <p>#{main.currentUser.username}</p>
+                                    </ui:insert>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-content">
+                                    <ui:insert name="S1">
+                                    </ui:insert>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col s4">
+                            <div class="card">
+                                <div class="card-content">
+                                    <span class="card-title">Log in</span>
+                                    <p><a href="dashboard.xhtml?user=#{param['user']}">Log in as #{main.currentUser.username}</a></p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-content">
+                                    <ui:insert name="S2">
+                                        <span class="card-title">S2: Details</span>
+                                        <p>ID: #{main.currentUser.id}</p>
+                                    </ui:insert>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-content">
+                                    <ui:insert name="S3">
+                                        <span class="card-title">S3: Info</span>
+                                        <ul>
+                                            <li><a href="user-tweets.xhtml?user=#{param['user']}">Tweets: #{main.currentUser.tweets.size()}</a></li>
+                                            <li><a href="user-following.xhtml?user=#{param['user']}">Following: #{main.currentUser.following.size()}</a></li>
+                                            <li><a href="user-followers.xhtml?user=#{param['user']}">Followers: #{main.currentUser.followers.size()}</a></li>
+                                        </ul>
+                                    </ui:insert>
+                                </div>
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

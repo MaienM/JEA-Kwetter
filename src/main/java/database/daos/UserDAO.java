@@ -24,4 +24,13 @@ public class UserDAO extends BaseDAO<User> {
             return null;
         }
     }
+
+    public User findRandom() {
+        try {
+            return (User) em.createQuery("SELECT user FROM User user ORDER BY random()").setMaxResults(1).getSingleResult();
+        }
+        catch (NoResultException ignored) {
+            return null;
+        }
+    }
 }

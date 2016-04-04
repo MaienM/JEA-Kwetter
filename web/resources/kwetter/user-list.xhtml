@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+      xmlns:kwetter="http://java.sun.com/jsf/composite/kwetter"
+>
+    <composite:interface>
+        <composite:attribute name="users" type="java.util.Collection" />
+        <composite:attribute name="user_url" />
+        <composite:attribute name="text_none" />
+    </composite:interface>
+
+    <composite:implementation>
+        <ui:fragment rendered="#{empty cc.attrs.users}">
+            <p>#{cc.attrs.text_none}</p>
+        </ui:fragment>
+        <ui:fragment rendered="#{not empty cc.attrs.users}">
+            <ul class="collection">
+                <c:forEach var="user" items="#{cc.attrs.users}">
+                    <li class="collection-item">
+                        <a href="#{cc.attrs.user_url}?user=#{user.username}">
+                            <kwetter:user user="#{user}" />
+                        </a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </ui:fragment>
+    </composite:implementation>
+</html>

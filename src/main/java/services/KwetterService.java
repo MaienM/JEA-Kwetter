@@ -8,16 +8,24 @@ import database.models.Tweet;
 import database.models.User;
 
 import javax.ejb.Stateless;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named
 @Stateless
+@ApplicationScoped
 public class KwetterService {
+    @PersistenceContext(unitName = "main") private EntityManager em;
     @Inject private HashtagDAO hashtagDAO;
     @Inject private TweetDAO tweetDAO;
     @Inject private UserDAO userDAO;
@@ -38,6 +46,25 @@ public class KwetterService {
     }
 
     /**
+     * Get an user
+     *
+     * @param username The username of the user
+     * @return The user, or null if no user with that username exists
+     */
+    public User getUser(String username) {
+        return userDAO.findByUsername(username);
+    }
+
+    /**
+     * Get a random user
+     *
+     * @return The user, or null if no users exist
+     */
+    public User getRandomUser() {
+        return userDAO.findRandom();
+    }
+
+    /**
      * Get the total number of tweets
      *
      * @return The tweet count
@@ -47,12 +74,42 @@ public class KwetterService {
     }
 
     /**
-     * Get the 50 miost recent tweets
+     * Get the total number of tweets by a specific user
+     *
+     * @param user The user
+     * @return The tweet count for the given user
+     */
+    public long getTweetCountForUser(User user) {
+        return tweetDAO.getCountByUser(user);
+    }
+
+    /**
+     * Get a tweet by its id
+     *
+     * @param id The id of the tweet
+     * @return The tweet, or null if there is no tweet with that id
+     */
+    public Tweet getTweet(long id) {
+        return tweetDAO.findByID(id);
+    }
+
+    /**
+     * Get the 50 most recent tweets
      *
      * @return The tweets
      */
     public List<Tweet> getRecentTweets() {
         return tweetDAO.getRecent();
+    }
+
+    /**
+     * Get the 50 most recent tweets from a given user
+     *
+     * @param user The user
+     * @return The tweets
+     */
+    public List<Tweet> getRecentTweetsFromUser(User user) {
+        return tweetDAO.getRecentByUser(user);
     }
 
     /**
@@ -103,10 +160,11 @@ public class KwetterService {
      * @return The new tweet
      */
     public Tweet createTweet(User user, String content) {
+        user = getUser(user.getUsername());
         Tweet tweet = user.addTweet(content);
 
         // Find mentions.
-        List<User> mentioned = new ArrayList<>();
+        Set<User> mentioned = new HashSet<>();
         Matcher mentionMatcher = REGEX_MENTION.matcher(content);
         while (mentionMatcher.find()) {
             User mention = userDAO.findByUsername(mentionMatcher.group("username"));
@@ -116,7 +174,7 @@ public class KwetterService {
         tweet.setMentioned(mentioned);
 
         // Find hashtags.
-        List<Hashtag> hashtags = new ArrayList<>();
+        Set<Hashtag> hashtags = new HashSet<>();
         Matcher hashtagMatcher = REGEX_HASHTAG.matcher(content);
         while (hashtagMatcher.find()) {
             hashtags.add(hashtagDAO.findOrCreateByName(hashtagMatcher.group("hashtag")));
@@ -133,7 +191,7 @@ public class KwetterService {
      * @param follower The follower whose follows to get
      * @return The followers that follower is following
      */
-    public List<User> getFollows(User follower) {
+    public Set<User> getFollows(User follower) {
         return follower.getFollowing();
     }
 
@@ -157,5 +215,14 @@ public class KwetterService {
     public void removeFollow(User follower, User followee) {
         follower.getFollowing().remove(followee);
         userDAO.save(follower);
+    }
+
+    /**
+     * Get the trending hashtags
+     *
+     * @return The trending hashtags
+     */
+    public List<Hashtag> getTrends() {
+        return hashtagDAO.getTrends();
     }
 }
