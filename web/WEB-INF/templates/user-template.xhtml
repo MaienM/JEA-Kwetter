@@ -39,8 +39,14 @@
                         <div class="col s4">
                             <div class="card">
                                 <div class="card-content">
-                                    <span class="card-title">Log in</span>
-                                    <p><a href="dashboard.xhtml?user=#{param['user']}">Log in as #{main.currentUser.username}</a></p>
+                                    <ui:fragment rendered="#{!main.loggedin}">
+                                        <span class="card-title">Log in</span>
+                                        <p><a href="dashboard.xhtml">Log in</a></p>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{main.loggedin}">
+                                        <span class="card-title">Dashboard</span>
+                                        <p><a href="dashboard.xhtml">Go to your dashboard</a></p>
+                                    </ui:fragment>
                                 </div>
                             </div>
 

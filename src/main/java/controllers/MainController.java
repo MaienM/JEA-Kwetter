@@ -14,11 +14,17 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.nio.charset.Charset;
+import java.nio.file.attribute.UserPrincipal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @ViewScoped
@@ -35,9 +41,20 @@ public class MainController {
 
     public User getCurrentUser() {
         if (!currentUserSet) {
-            Map<String, String> parameterMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-            String username = parameterMap.get("user");
+            String username = null;
 
+            Principal userPrincipal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+            if (userPrincipal != null) {
+                // Get the logged in user.
+                username = userPrincipal.getName();
+            }
+            else {
+                // No logged in user, so get the user from the url.
+                Map<String, String> parameterMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+                username = parameterMap.get("user");
+            }
+
+            // Get the user, if possible.
             if (username != null) {
                 currentUser = service.getUser(username);
             }
@@ -112,5 +129,9 @@ public class MainController {
         String email = input.toLowerCase() + "@kwetter.com";
         MessageDigest md = MessageDigest.getInstance("MD5");
         return (new HexBinaryAdapter()).marshal(md.digest(email.getBytes())).toLowerCase();
+    }
+
+    public boolean isLoggedin() {
+        return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal() != null;
     }
 }

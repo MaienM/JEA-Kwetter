@@ -22,7 +22,7 @@
                 </ui:fragment>
                 <ui:fragment rendered="#{main.currentUser != null}">
                     <div class="row">
-                        <div class="col s8">
+                        <div class="col s12">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title">Search</span>
@@ -42,14 +42,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col s4">
-                            <div class="card">
-                                <div class="card-content">
-                                    <span class="card-title">Log out</span>
-                                    <p><a href="user-tweets.xhtml?user=#{param['user']}">Log out #{main.currentUser.username}</a></p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col s8">
@@ -66,7 +58,7 @@
                                                     </div>
                                                     <div class="input-field col s2">
                                                         <h:commandButton styleClass="btn-large waves-effect waves-white" value="Post">
-                                                            <f:ajax execute="tweet" render="tweet :timeline :userTweets" />
+                                                            <f:ajax execute="tweet" render="tweet :timeline :userTweets :trends" />
                                                         </h:commandButton>
                                                     </div>
                                                 </div>
@@ -89,14 +81,14 @@
                                                 <span class="card-title">Timeline</span>
 
                                                 <h:panelGroup id="timeline" layout="block">
-                                                    <kwetter:tweet-list tweets="#{main.tweets}" text_none="No tweets" />
+                                                    <kwetter:tweet-list tweets="#{main.tweets}" textNone="No tweets" />
                                                 </h:panelGroup>
                                             </div>
                                             <div id="tab-mentions">
                                                 <span class="card-title">Mentions</span>
 
                                                 <h:panelGroup id="mentions" layout="block">
-                                                    <kwetter:tweet-list tweets="#{main.currentUserMentionedTweets}" text_none="You've not been mentioned in any tweets" />
+                                                    <kwetter:tweet-list tweets="#{main.currentUserMentionedTweets}" textNone="You've not been mentioned in any tweets" />
                                                 </h:panelGroup>
                                             </div>
                                         </div>
@@ -129,7 +121,7 @@
                                         <div class="card-content">
                                             <span class="card-title">Following #{main.currentUser.following.size()}</span>
 
-                                            <kwetter:user-list users="#{main.currentUser.following}" user_url="user-tweets.xhtml" text_none="Not following anyone" />
+                                            <kwetter:user-list users="#{main.currentUser.following}" userUrl="user-tweets.xhtml" textNone="Not following anyone" />
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +130,7 @@
                                         <div class="card-content">
                                             <span class="card-title">Followers #{main.currentUser.followers.size()}</span>
 
-                                            <kwetter:user-list users="#{main.currentUser.followers}" user_url="user-tweets.xhtml" text_none="Not followed by anyone" />
+                                            <kwetter:user-list users="#{main.currentUser.followers}" userUrl="user-tweets.xhtml" textNone="Not followed by anyone" />
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +141,7 @@
                                         <div class="card-content">
                                             <span class="card-title">Trends</span>
 
-                                            <h:form>
+                                            <h:form id="trends">
                                                 <f:ajax render=":timeline">
                                                     <ul class="collection">
                                                         <c:forEach items="#{main.trends}" var="tag">
