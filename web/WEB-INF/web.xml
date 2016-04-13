@@ -14,8 +14,12 @@
     </servlet-mapping>
 
     <login-config>
-        <auth-method>BASIC</auth-method>
+        <auth-method>FORM</auth-method>
         <realm-name>security</realm-name>
+        <form-login-config>
+            <form-login-page>/auth/login.xhtml</form-login-page>
+            <form-error-page>/auth/login-error.xhtml</form-error-page>
+        </form-login-config>
     </login-config>
 
     <security-constraint>

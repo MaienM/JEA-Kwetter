@@ -22,7 +22,7 @@
                 </ui:fragment>
                 <ui:fragment rendered="#{main.currentUser != null}">
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s8">
                             <div class="card">
                                 <div class="card-content">
                                     <span class="card-title">Search</span>
@@ -38,6 +38,16 @@
                                                 </h:commandButton>
                                             </div>
                                         </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <div class="card">
+                                <div class="card-content">
+                                    <h:form>
+                                        <span class="card-title">Log out</span>
+                                        <p><h:commandLink action="#{main.logout}" value="Log out" /></p>
                                     </h:form>
                                 </div>
                             </div>

@@ -134,4 +134,19 @@ public class MainController {
     public boolean isLoggedin() {
         return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal() != null;
     }
+
+    public String logout() {
+        User user = getCurrentUser();
+
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+            request.logout();
+        } catch (ServletException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Logout failure", e);
+        }
+
+        return "/user-tweets.xhtml?faces-redirect=true&user=" + user.getUsername();
+    }
 }
