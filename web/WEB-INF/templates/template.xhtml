@@ -8,19 +8,28 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-        <title>Starter Template - Materialize</title>
+        <title>JEA</title>
 
         <!-- CSS  -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"></link>
-
-        <!--  Scripts-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
     </h:head>
 
     <h:body>
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">&nbsp;JEA</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="import">Import</a></li>
+                    <li><a href="user-tweets.xhtml?user=#{main.randomUser.username}">Random user</a></li>
+                    <li><a href="dashboard.xhtml">Dashboard</a></li>
+                </ul>
+            </div>
+        </nav>
+        <br />
+
+        <!-- Content -->
         <div class="container">
             <ui:insert name="body">
                 <div class="row">
@@ -30,5 +39,19 @@
                 </div>
             </ui:insert>
         </div>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <div class="footer-copyright">
+                <div class="container">
+                    © 2016 Michon van Dooren &amp; Subhi Dweik
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scripts-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
     </h:body>
 </html>

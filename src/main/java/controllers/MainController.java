@@ -4,6 +4,7 @@ package controllers;
 import database.models.Hashtag;
 import database.models.Tweet;
 import database.models.User;
+import services.JMSService;
 import services.KwetterService;
 import sun.rmi.runtime.Log;
 
@@ -14,6 +15,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.Topic;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +35,9 @@ import java.util.logging.Logger;
 public class MainController {
     @Inject
     private KwetterService service;
+
+    @Inject
+    private JMSService jmsService;
 
     private boolean currentUserSet = false;
     private User currentUser = null;
@@ -119,6 +125,14 @@ public class MainController {
 
     public void setPost(String content) {
         tweets.add(0, service.createTweet(getCurrentUser(), content));
+    }
+
+    public String getPostQueue() {
+        return "";
+    }
+
+    public void setPostQueue(String content) {
+        jmsService.createTweet(getCurrentUser(), content);
     }
 
     public void setHashtag(String tag) {
