@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Named
 @Stateless
@@ -32,5 +33,9 @@ public class UserDAO extends BaseDAO<User> {
         catch (NoResultException ignored) {
             return null;
         }
+    }
+
+    public List<User> getAll() {
+        return (List<User>) em.createQuery("SELECT user FROM User user").setMaxResults(50).getResultList();
     }
 }

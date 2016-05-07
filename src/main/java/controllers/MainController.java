@@ -1,28 +1,21 @@
 package controllers;
 
 
+import com.sun.javaws.exceptions.ExitException;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import database.models.Hashtag;
 import database.models.Tweet;
 import database.models.User;
 import services.JMSService;
 import services.KwetterService;
-import sun.rmi.runtime.Log;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.jms.ConnectionFactory;
-import javax.jms.Topic;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.nio.charset.Charset;
-import java.nio.file.attribute.UserPrincipal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -77,6 +70,10 @@ public class MainController {
         return randomUser;
     }
 
+    public List<User> getUsers() {
+        return service.getUsers();
+    }
+
     public List<Hashtag> getTrends() {
         return service.getTrends();
     }
@@ -127,14 +124,6 @@ public class MainController {
         tweets.add(0, service.createTweet(getCurrentUser(), content));
     }
 
-    public String getPostQueue() {
-        return "";
-    }
-
-    public void setPostQueue(String content) {
-        jmsService.createTweet(getCurrentUser(), content);
-    }
-
     public void setHashtag(String tag) {
         tweets = service.getRecentTweetsHashtag(tag);
     }
@@ -162,5 +151,53 @@ public class MainController {
         }
 
         return "/user-tweets.xhtml?faces-redirect=true&user=" + user.getUsername();
+    }
+
+    // Jms
+
+    private String jmsContent;
+    private User jmsUser;
+    private String jmsMethod;
+
+    public String getJmsContent() {
+        return "";
+    }
+
+    public void setJmsContent(String content) {
+        jmsContent = content;
+    }
+
+    public String getJmsUser() {
+        return null;
+    }
+
+    public void setJmsUser(String user) {
+        jmsUser = service.getUser(user);
+    }
+
+    public String getJmsMethod() {
+        return null;
+    }
+
+    public void setJmsMethod(String method) {
+        jmsMethod = method;
+    }
+
+    public void doJmsPost() throws Exception {
+        switch (jmsMethod) {
+            case "topic":
+                jmsService.createTweetTopic(jmsUser, jmsContent);
+                break;
+
+            case "queue":
+                jmsService.createTweetQueue(jmsUser, jmsContent);
+                break;
+
+            default:
+                throw new Exception("Unknown jms method: " + jmsMethod);
+        }
+
+        jmsUser = null;
+        jmsContent = null;
     }
 }

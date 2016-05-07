@@ -32,4 +32,9 @@
             <role-name>USER</role-name>
         </auth-constraint>
     </security-constraint>
+
+    <context-param>
+        <param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
+        <param-value>true</param-value>
+    </context-param>
 </web-app>

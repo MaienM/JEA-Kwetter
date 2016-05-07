@@ -225,4 +225,13 @@ public class KwetterService {
     public List<Hashtag> getTrends() {
         return hashtagDAO.getTrends();
     }
+
+    /**
+     * Get the first 50 users
+     *
+     * @return The list of users
+     */
+    public List<User> getUsers() {
+        return userDAO.getAll();
+    }
 }

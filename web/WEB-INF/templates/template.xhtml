@@ -24,6 +24,7 @@
                     <li><a href="import">Import</a></li>
                     <li><a href="user-tweets.xhtml?user=#{main.randomUser.username}">Random user</a></li>
                     <li><a href="dashboard.xhtml">Dashboard</a></li>
+                    <li><a href="jms.xhtml">Create tweet</a></li>
                 </ul>
             </div>
         </nav>
@@ -53,5 +54,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('select').material_select();
+            });
+        </script>
     </h:body>
 </html>

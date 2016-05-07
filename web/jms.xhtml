@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <h:body>
+        <ui:composition template="WEB-INF/templates/template.xhtml">
+            <ui:define name="body">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Post</span>
+                                <h:form>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h:inputText id="tweet" value="#{main.jmsContent}" maxlength="140" />
+                                            <label for="tweet">What's happening?</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <h:selectOneMenu id="users" value="#{main.jmsUser}">
+                                                <f:selectItems value="#{main.users}" var="user" itemValue="#{user.username}" itemLabel="#{user.username}" />
+                                            </h:selectOneMenu>
+                                            <label for="users">User</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <h:selectOneMenu id="method" value="#{main.jmsMethod}">
+                                                <f:selectItem itemValue="topic" itemLabel="Topic" />
+                                                <f:selectItem itemValue="queue" itemLabel="Queue" />
+                                            </h:selectOneMenu>
+                                            <label for="method">Method</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <h:commandButton styleClass="btn-large waves-effect waves-white" value="Post" action="#{main.doJmsPost}" />
+                                        </div>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
