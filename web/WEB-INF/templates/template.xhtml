@@ -25,6 +25,7 @@
                     <li><a href="user-tweets.xhtml?user=#{main.randomUser.username}">Random user</a></li>
                     <li><a href="dashboard.xhtml">Dashboard</a></li>
                     <li><a href="jms.xhtml">Create tweet</a></li>
+                    <li><a href="following.xhtml">Manage followers</a></li>
                 </ul>
             </div>
         </nav>
@@ -59,5 +60,6 @@
                 $('select').material_select();
             });
         </script>
+        <ui:insert name="extra-scripts"></ui:insert>
     </h:body>
 </html>

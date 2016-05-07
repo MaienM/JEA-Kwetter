@@ -160,7 +160,8 @@ public class KwetterService {
      * @return The new tweet
      */
     public Tweet createTweet(User user, String content) {
-        user = getUser(user.getUsername());
+        user = refresh(user);
+
         Tweet tweet = user.addTweet(content);
 
         // Find mentions.
@@ -186,22 +187,35 @@ public class KwetterService {
     }
 
     /**
-     * Get the followers that the given follower is following
+     * Get the user that the given user is followed byk
      *
-     * @param follower The follower whose follows to get
-     * @return The followers that follower is following
+     * @param followee The user whoms followers to get
+     * @return The followers of the user
+     */
+    public Set<User> getFollowers(User followee) {
+        return followee.getFollowers();
+    }
+
+    /**
+     * Get the user that the given user is following
+     *
+     * @param follower The user whose follows to get
+     * @return The users that follower is following
      */
     public Set<User> getFollows(User follower) {
         return follower.getFollowing();
     }
 
     /**
-     * Add a follow to the given follower
+     * Add a user to the given follower
      *
      * @param follower The follower whose follows to modify
      * @param followee The follower to add to the follows list
      */
     public void addFollow(User follower, User followee) {
+        follower = refresh(follower);
+        followee = refresh(followee);
+
         follower.getFollowing().add(followee);
         userDAO.save(follower);
     }
@@ -213,6 +227,9 @@ public class KwetterService {
      * @param followee The follower to remove from the follows list
      */
     public void removeFollow(User follower, User followee) {
+        follower = refresh(follower);
+        followee = refresh(followee);
+
         follower.getFollowing().remove(followee);
         userDAO.save(follower);
     }
@@ -233,5 +250,9 @@ public class KwetterService {
      */
     public List<User> getUsers() {
         return userDAO.getAll();
+    }
+
+    private User refresh(User user) {
+        return getUser(user.getUsername());
     }
 }

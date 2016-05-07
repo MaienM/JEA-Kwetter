@@ -25,6 +25,7 @@ public class User {
     @Column(nullable = false)
     private String username;
 
+    @JSON(include = false)
     @Column(nullable = false)
     private String password;
 
@@ -134,6 +135,14 @@ public class User {
 
     public void setGroups(Set<Group> groups) {
         this.groups = groups;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof User) {
+            return getId() == ((User) other).getId();
+        }
+        return false;
     }
 }
 

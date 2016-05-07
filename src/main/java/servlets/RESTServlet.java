@@ -3,14 +3,11 @@ package servlets;
 import flexjson.JSONSerializer;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 import services.KwetterService;
 import servlets.endpoints.Endpoint;
-import servlets.endpoints.EndpointError;
+import servlets.endpoints.EndpointResponse;
 
 import javax.inject.Inject;
-import javax.naming.PartialResultException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
@@ -23,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -86,34 +82,46 @@ public class RESTServlet extends HttpServlet {
 
             // Invoke the method.
             try {
+                //Object t = entry.getValue().getDeclaringClass().newInstance();
                 responseData = entry.getValue().invoke(null, service, params);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationError e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
-                //responseData = new EndpointError(500, "internal server error");
-                responseData = e;
+                responseData = new EndpointResponse(EndpointResponse.Status.INTERNAL_SERVER_ERROR, "internal server error");
+                //responseData = e;
             }
             break;
         }
 
         // 404
-        if (!matchingRoute || responseData == null) {
-            responseData = new EndpointError(404, "not found");
+        if (!matchingRoute) {
+            responseData = new EndpointResponse(EndpointResponse.Status.NOT_FOUND, "not found");
+        }
+
+        // EndpointResponse
+        if (responseData instanceof EndpointResponse) {
+            response.setStatus(((EndpointResponse) responseData).getStatus().getCode());
+            responseData = ((EndpointResponse) responseData).getData();
         }
 
         // Convert to json and return.
         JSONSerializer serializer = new JSONSerializer();
         serializer.exclude("*.class");
         serializer.deepSerialize(responseData, response.getWriter());
-        if (responseData.getClass() == EndpointError.class) {
-            response.setStatus(((EndpointError) responseData).status);
-        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGeneric(request, response, Endpoint.Method.GET);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGeneric(request, response, Endpoint.Method.POST);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGeneric(request, response, Endpoint.Method.GET);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGeneric(request, response, Endpoint.Method.PUT);
+    }
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGeneric(request, response, Endpoint.Method.DELETE);
     }
 }
