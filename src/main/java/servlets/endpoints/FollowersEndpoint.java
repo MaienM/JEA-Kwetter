@@ -7,13 +7,14 @@ import services.KwetterService;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class FollowersEndpoint {
     @Endpoint("/users/([^/]+)/followers")
-    public static Object getFollowers(KwetterService service, String[] params) {
+    public static Object getFollowers(HttpServletRequest request, KwetterService service, String[] params) {
         // Get the users followers and follows
         User user = service.getUser(params[0]);
         Set<User> followers = service.getFollowers(user);

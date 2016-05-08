@@ -29,6 +29,18 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String bio;
+
+    @Column
+    private String location;
+
+    @Column
+    private String website;
+
+    @Column
+    private String picture;
+
     @JSON(include = false)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Tweet> tweets = new HashSet<>();
@@ -87,6 +99,38 @@ public class User {
         }
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public Set<Tweet> getTweets() {
         return tweets;
     }
@@ -135,14 +179,6 @@ public class User {
 
     public void setGroups(Set<Group> groups) {
         this.groups = groups;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other instanceof User) {
-            return getId() == ((User) other).getId();
-        }
-        return false;
     }
 }
 

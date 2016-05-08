@@ -3,13 +3,14 @@ package servlets.endpoints;
 import database.models.User;
 import services.KwetterService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class FollowsEndpoint {
     @Endpoint("/users/([^/]+)/follows")
-    public static Object getFollows(KwetterService service, String[] params) {
+    public static Object getFollows(HttpServletRequest request, KwetterService service, String[] params) {
         // Get the users followers and follows
         User user = service.getUser(params[0]);
         Set<User> follows = service.getFollows(user);
@@ -28,7 +29,7 @@ public class FollowsEndpoint {
     }
 
     @Endpoint(value = "/users/([^/]+)/follows/([^/]+)", method = Endpoint.Method.POST)
-    public static Object addFollow(KwetterService service, String[] params) {
+    public static Object addFollow(HttpServletRequest request, KwetterService service, String[] params) {
         User user = service.getUser(params[0]);
         User followee = service.getUser(params[1]);
         if (user == null || followee == null) {
@@ -41,7 +42,7 @@ public class FollowsEndpoint {
     }
 
     @Endpoint(value = "/users/([^/]+)/follows/([^/]+)", method = Endpoint.Method.DELETE)
-    public static Object removeFollow(KwetterService service, String[] params) {
+    public static Object removeFollow(HttpServletRequest request, KwetterService service, String[] params) {
         User user = service.getUser(params[0]);
         User followee = service.getUser(params[1]);
         if (user == null || followee == null) {

@@ -83,7 +83,7 @@ public class RESTServlet extends HttpServlet {
             // Invoke the method.
             try {
                 //Object t = entry.getValue().getDeclaringClass().newInstance();
-                responseData = entry.getValue().invoke(null, service, params);
+                responseData = entry.getValue().invoke(null, request, service, params);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationError e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
                 responseData = new EndpointResponse(EndpointResponse.Status.INTERNAL_SERVER_ERROR, "internal server error");
@@ -102,6 +102,10 @@ public class RESTServlet extends HttpServlet {
             response.setStatus(((EndpointResponse) responseData).getStatus().getCode());
             responseData = ((EndpointResponse) responseData).getData();
         }
+
+        // CORS headers.
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
 
         // Convert to json and return.
         JSONSerializer serializer = new JSONSerializer();
