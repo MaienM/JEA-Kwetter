@@ -106,6 +106,7 @@ public class RESTServlet extends HttpServlet {
         // CORS headers.
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         // Convert to json and return.
         JSONSerializer serializer = new JSONSerializer();
@@ -127,5 +128,10 @@ public class RESTServlet extends HttpServlet {
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGeneric(request, response, Endpoint.Method.DELETE);
+    }
+
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Content-type", null);
+        doGeneric(request, response, Endpoint.Method.OPTIONS);
     }
 }

@@ -255,4 +255,14 @@ public class KwetterService {
     private User refresh(User user) {
         return getUser(user.getUsername());
     }
+
+    public void saveUser(String username, User user) {
+        User newUser = getUser(username);
+        newUser.setUsername(user.getUsername());
+        newUser.setBio(user.getBio());
+        newUser.setLocation(user.getLocation());
+        newUser.setWebsite(user.getWebsite());
+        newUser.setPicture(user.getPicture());
+        userDAO.save(newUser);
+    }
 }

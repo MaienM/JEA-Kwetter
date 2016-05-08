@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Endpoint {
     enum Method {
-        GET, POST, PUT, DELETE;
+        GET, POST, PUT, DELETE, OPTIONS;
     };
 
     String value();

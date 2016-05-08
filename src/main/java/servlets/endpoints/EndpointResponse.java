@@ -7,6 +7,7 @@ public class EndpointResponse {
         NO_CONTENT(204),
         INVALID(400),
         NOT_FOUND(404),
+        IM_A_TEAPOT(418),
         INTERNAL_SERVER_ERROR(500);
 
         private int code;

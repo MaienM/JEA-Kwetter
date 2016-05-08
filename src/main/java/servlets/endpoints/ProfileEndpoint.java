@@ -29,12 +29,18 @@ public class ProfileEndpoint {
         JSONDeserializer<Map<String, String>> deserializer = new JSONDeserializer<>();
         Map<String, String> data = deserializer.deserialize(request.getReader());
 
-        user.setUsername(data.get("username"));
+        String oldUsername = user.getUsername();
+        String username = data.get("username");
+        if (!user.getUsername().equals(username) && service.getUser(username) != null) {
+            return new EndpointResponse(EndpointResponse.Status.IM_A_TEAPOT, "Username already in use");
+        }
+
+        user.setUsername(username);
         user.setBio(data.get("bio"));
         user.setLocation(data.get("location"));
         user.setWebsite(data.get("website"));
         user.setPicture(data.get("picture"));
-        service.saveUser(user);
+        service.saveUser(oldUsername, user);
 
         return user;
     }
