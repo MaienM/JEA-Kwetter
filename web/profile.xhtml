@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <h:body>
+        <ui:composition template="WEB-INF/templates/template.xhtml">
+            <ui:define name="body">
+                <div class="row">
+                    <div class="col s12">
+                        <ui:fragment rendered="#{main.currentUser == null}">
+                            <p>User not found.</p>
+                            <ui:fragment rendered="#{main.randomUser != null}">
+                                <p><a href="profile.xhtml?user=#{main.randomUser.username}">Click here to go to a random user's page</a></p>
+                            </ui:fragment>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{main.currentUser != null}">
+                            <iframe src="http://xtyx.nl:9000/#/profile/#{main.currentUser.username}" style="position: absolute; top: 64px; left: 0; width: 100%; height: 700px; border: none;"></iframe>
+                            <div style="height: 700px;"></div>
+                        </ui:fragment>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

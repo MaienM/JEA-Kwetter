@@ -32,6 +32,16 @@
             <description />
             <url-pattern>/dashboard.xhtml</url-pattern>
         </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>WebSocket UI</web-resource-name>
+            <description />
+            <url-pattern>/websocket.xhtml</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>WebSocket</web-resource-name>
+            <description />
+            <url-pattern>/socket</url-pattern>
+        </web-resource-collection>
         <auth-constraint>
             <role-name>USER</role-name>
         </auth-constraint>

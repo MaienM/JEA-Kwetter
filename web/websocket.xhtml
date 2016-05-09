@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <h:body>
+        <ui:composition template="WEB-INF/templates/template.xhtml">
+            <ui:define name="body">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Echo demo</span>
+                                <div class="row">
+                                    <div class="input-field col s10">
+                                        <input type="text" id="input"></input>
+                                        <label for="input">Message</label>
+                                    </div>
+                                    <div class="input-field col s2">
+                                        <button id="send-button" class="btn-large waves-effect waves-white">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Echo</span>
+                                <div class="row">
+                                    <div class="col s12" id="message-container">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+
+            <ui:define name="extra-scripts">
+                <script type="text/javascript" src="js/socket.js"></script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -56,6 +56,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1" level="application_server_libraries" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.websocket:javax.websocket-api:1.1" level="project" />
     <orderEntry type="library" name="Maven: javax.jms:javax.jms-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:15.0" level="project" />

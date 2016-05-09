@@ -5,6 +5,7 @@ import services.KwetterService;
 
 import javax.inject.Inject;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     public static final Pattern REGEX_USERNAME = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
 
     @Id
@@ -64,6 +65,11 @@ public class User {
 
     @JSON(include = false)
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_groups",
+            joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "name", referencedColumnName = "name")
+    )
     private Set<Group> groups = new HashSet<>();
 
     public User() {}
